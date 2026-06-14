@@ -1,0 +1,65 @@
+.about-section {
+  padding: 96px 32px;
+  background: var(--white);
+}
+
+.about-section__inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* ── Text ── */
+.about-section__body {
+  font-size: 1rem;
+  color: var(--text-mid);
+  line-height: 1.85;
+  margin-top: 18px;
+}
+
+.about-section__text .section-eyebrow { margin-bottom: 12px; }
+.about-section__text .section-heading { margin-bottom: 4px; }
+
+/* ── Media ── */
+.about-section__media {
+  position: relative;
+}
+
+.about-section__img-frame {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-hover);
+}
+
+.about-section__img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gold accent corner */
+.about-section__img-accent {
+  position: absolute;
+  bottom: -16px;
+  right: -16px;
+  width: 120px;
+  height: 120px;
+  border-right: 4px solid var(--gold);
+  border-bottom: 4px solid var(--gold);
+  border-radius: 0 0 16px 0;
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .about-section__inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .about-section__img { height: 320px; }
+  .about-section__img-accent { display: none; }
+}
