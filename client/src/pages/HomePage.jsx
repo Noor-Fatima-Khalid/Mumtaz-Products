@@ -1,14 +1,13 @@
-import Navbar from "../components/Navbar/Navbar";
-import Hero from "../components/Hero/Hero";
-import BestSellers from "../components/BestSellers/BestSellers";
-import PromoSection from "../components/PromoSection/PromoSection";
-import AboutUs from "../components/AboutUs/AboutUs";
-import ProductSection from "../components/ProductSection/ProductSection";
+import Navbar from "../components/NavBar";
+import Hero from "../components/Hero";
+import BestSellers from "../components/BestSellers";
+import PromoSection from "../components/PromoSection";
+import AboutUs from "../components/AboutUs";
+import ProductSection from "../components/ProductSection";
 
 const HomePage = () => {
   return (
     <>
-      <Navbar />
       <Hero />
       <BestSellers />
       <PromoSection />

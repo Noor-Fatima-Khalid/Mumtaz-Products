@@ -1,0 +1,9 @@
+{
+  _id,
+  name,
+  price,
+  qty,
+  sold,
+  inStock,   // computed in backend
+  image       // single image from DB
+}
