@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react"
 import { Search, ShoppingCart, User, X, Leaf } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export default function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false)
@@ -31,26 +32,26 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-[68px] flex items-center justify-between">
 
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2 flex-shrink-0">
+        <Link to="/" className="flex items-center gap-2 flex-shrink-0">
           <Leaf className="text-gold" size={22} />
           <span className="text-white font-bold text-xl tracking-wide font-display">
             Mumtaz <span className="text-gold">Products</span>
           </span>
-        </a>
+        </Link>
 
         {/* Actions */}
         <nav className="flex items-center gap-3">
 
           {/* Shop */}
-          <a
-            href="#shop"
+          <Link
+            to="/shop"
             className="text-gold font-semibold text-sm relative px-1
             after:content-[''] after:absolute after:left-0 after:-bottom-1
             after:h-[1px] after:w-0 after:bg-gold
             hover:after:w-full after:transition-all"
           >
             Shop
-          </a>
+          </Link>
 
           {/* Search */}
           <div
@@ -79,7 +80,8 @@ export default function Navbar() {
           </div>
 
           {/* Cart */}
-          <button
+          <Link
+            to="/cart"
             className="relative w-11 h-11 flex items-center justify-center text-gold rounded-full
             hover:bg-gold/10 hover:scale-105 active:scale-95 transition"
           >
@@ -88,15 +90,16 @@ export default function Navbar() {
             text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
               0
             </span>
-          </button>
+          </Link>
 
           {/* User */}
-          <button
+          <Link
+            to="/login"
             className="w-11 h-11 flex items-center justify-center text-gold rounded-full
             hover:bg-gold/10 hover:scale-105 active:scale-95 transition"
           >
             <User size={20} />
-          </button>
+          </Link>
 
         </nav>
       </div>

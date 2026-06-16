@@ -7,70 +7,40 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [notif, setNotif] = useState({
-    show: false,
-    productName: "",
-  });
+  const [notif, setNotif] = useState({ show: false, productName: "" });
 
   const addToCart = async (product, variant, quantity = 1) => {
     try {
       const token = localStorage.getItem("token");
-
-      if (!token) {
-        console.error("User not authenticated");
-        return;
-      }
-
-      if (!product?._id || !variant?._id) {
-        console.error("Invalid product or variant");
-        return;
-      }
+      if (!token) throw new Error("User not authenticated");
 
       await axios.post(
         "http://localhost:5000/api/cart/add",
-        {
-          productId: product._id,
-          variantId: variant._id,
-          quantity,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { productId: product._id, variantId: variant._id, quantity },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setCart((prev) => {
-        const existingItem = prev.find(
+        const existing = prev.find(
           (item) =>
-            item.productId === product._id &&
-            item.variantId === variant._id
+            item.productId === product._id && item.variantId === variant._id
         );
-
-        if (existingItem) {
+        if (existing) {
           return prev.map((item) =>
-            item.productId === product._id &&
-            item.variantId === variant._id
+            item.productId === product._id && item.variantId === variant._id
               ? { ...item, quantity: item.quantity + quantity }
               : item
           );
+        } else {
+          return [
+            ...prev,
+            { productId: product._id, variantId: variant._id, quantity },
+          ];
         }
-
-        return [
-          ...prev,
-          {
-            productId: product._id,
-            variantId: variant._id,
-            quantity,
-          },
-        ];
       });
 
-      // show notification
-      setNotif({
-        show: true,
-        productName: product.name || "Item",
-      });
+      // ✅ Trigger notification
+      setNotif({ show: true, productName: product.name });
     } catch (err) {
       console.error("Error adding to cart:", err);
     }
@@ -79,17 +49,11 @@ export const CartProvider = ({ children }) => {
   return (
     <CartContext.Provider value={{ cart, addToCart, notif, setNotif }}>
       {children}
-
-      {/* Notification */}
+      {/* ✅ Notification always available */}
       <CartNotification
         show={notif.show}
         message={`${notif.productName} added to cart`}
-        onClose={() =>
-          setNotif({
-            show: false,
-            productName: "",
-          })
-        }
+        onClose={() => setNotif({ show: false, productName: "" })}
       />
     </CartContext.Provider>
   );

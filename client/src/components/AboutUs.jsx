@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom"
+
 export default function AboutUs() {
   return (
     <section id="about" className="py-24 px-6 bg-white">
@@ -21,12 +23,11 @@ export default function AboutUs() {
             reconnect families with food that is wholesome, natural, and true to its origin.
           </p>
 
-          <a
-            href="/products"
+          <Link to="/shop"
             className="inline-flex mt-4 items-center gap-2 bg-gold text-green-dark font-semibold text-sm uppercase tracking-wider px-8 py-3 rounded-btn border-2 border-gold transition hover:bg-transparent hover:text-gold hover:shadow-card"
           >
             Our Products
-          </a>
+          </Link>
         </div>
 
         {/* Image */}

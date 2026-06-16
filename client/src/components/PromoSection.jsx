@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function PromoSection() {
   return (
     <section className="bg-green-mid py-24 px-6">
@@ -16,12 +18,11 @@ export default function PromoSection() {
           and revive the simplicity of traditional living. Pure, honest, and uncompromised.
         </p>
 
-        <a
-          href="/shop"
+        <Link to='/shop'
           className="inline-flex items-center gap-2 bg-gold text-green-dark font-semibold text-sm uppercase tracking-wider px-8 py-3 rounded-btn border-2 border-gold transition hover:bg-transparent hover:text-gold hover:shadow-card"
         >
           Shop Now
-        </a>
+        </Link>
 
       </div>
     </section>

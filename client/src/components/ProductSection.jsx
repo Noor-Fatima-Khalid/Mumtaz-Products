@@ -6,7 +6,7 @@ const SECTIONS = [
     body:
       "Our Pure Cold-Pressed Mustard and Sesame Oils are crafted with care to preserve their natural richness, flavor, and nutrients. Sustainably sourced and bottled with precision, these oils offer a luxurious, nutrient-dense alternative to conventional cooking oils. Packed with antioxidants and essential fatty acids, each drop is a celebration of purity, tradition, and elevated taste.",
     cta: "Shop Now",
-    ctaHref: "/products/oils",
+    ctaHref: "/shop",
     img: "https://placehold.co/680x520/1C3A2F/C9A84C?text=Cold+Press+Oils",
     imgAlt: "Cold-pressed oil",
   },
@@ -17,7 +17,7 @@ const SECTIONS = [
     body:
       "Stone-ground the traditional way to retain the bran, germ, and natural oils that industrial milling strips away. Our Chakki Ka Atta, Black Atta, and Organic variants give your rotis the texture, flavour, and nutrition your family deserves — nothing added, nothing removed.",
     cta: "Shop Now",
-    ctaHref: "/products/attas",
+    ctaHref: "/shop",
     img: "https://placehold.co/680x520/2A5240/E2C97E?text=Premium+Attas",
     imgAlt: "Fresh rotis",
   },
@@ -28,7 +28,7 @@ const SECTIONS = [
     body:
       "Naturally sourced dates packed with energy, fiber, and essential minerals.",
     cta: "Shop Now",
-    ctaHref: "/products/dates",
+    ctaHref: "/shop",
     img: "https://placehold.co/680x520/3D7A5A/F0E4B8?text=Premium+Dates",
     imgAlt: "Dates",
   },

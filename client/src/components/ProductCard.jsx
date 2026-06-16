@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductCard({ product }) {
+  const navigate = useNavigate();
   const [pressed, setPressed] = useState(false)
 
   if (!product) return null
@@ -79,8 +81,11 @@ export default function ProductCard({ product }) {
           <button
             disabled={!finalInStock}
             onClick={(e) => {
-              e.stopPropagation()
-              console.log("Add to cart:", finalId)
+              e.stopPropagation();
+
+              console.log("Add to cart:", finalId);
+
+              navigate("/cart"); // 👈 redirect to cart page
             }}
             className={`
               w-full py-2 text-sm uppercase tracking-wide font-semibold
@@ -89,13 +94,12 @@ export default function ProductCard({ product }) {
               box-border
               transition-all duration-200
 
-              ${
-                finalInStock
-                  ? "text-green-dark bg-transparent hover:bg-green-dark hover:text-white hover:border-green-dark"
-                  : "text-green-dark bg-transparent opacity-50 cursor-not-allowed"
-              }
+              ${finalInStock
+                          ? "text-green-dark bg-transparent hover:bg-green-dark hover:text-white hover:border-green-dark"
+                          : "text-green-dark bg-transparent opacity-50 cursor-not-allowed"
+                        }
             `}
-          >
+            >
             {finalInStock ? "Add to cart" : "Unavailable"}
           </button>
         </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import ConfirmDialog from "../components/ConfirmDialogue"; // FIXED NAME
+import ConfirmDialog from "../components/ConfirmDialogue";
 
 export default function CartPage() {
   const [cartItems, setCartItems] = useState([]);
@@ -14,11 +14,16 @@ export default function CartPage() {
 
   const apiBase = "http://localhost:5000/api/cart";
 
+  // ✅ SAFE AUTH HEADER
   const getAuthHeader = () => {
     const token = localStorage.getItem("token");
-    return { headers: { Authorization: `Bearer ${token}` } };
+    if (!token) return {};
+    return {
+      headers: { Authorization: `Bearer ${token}` },
+    };
   };
 
+  // ✅ FETCH CART
   const fetchCart = async () => {
     setLoading(true);
     try {
@@ -36,14 +41,19 @@ export default function CartPage() {
     fetchCart();
   }, []);
 
-  const updateQuantity = async (itemId, newQty) => {
+  // 🔑 SUPPORT BOTH itemId AND _id
+  const getId = (item) => item.itemId || item._id;
+
+  // ✅ UPDATE QUANTITY
+  const updateQuantity = async (item, newQty) => {
+    const id = getId(item);
     if (newQty < 1) return;
 
-    setBusyItem(itemId);
+    setBusyItem(id);
     try {
       const { data } = await axios.put(
         `${apiBase}/update`,
-        { itemId, quantity: newQty },
+        { itemId: id, quantity: newQty },
         getAuthHeader()
       );
       setCartItems(data.items || []);
@@ -54,11 +64,14 @@ export default function CartPage() {
     }
   };
 
-  const removeItem = async (itemId) => {
-    setBusyItem(itemId);
+  // ✅ REMOVE ITEM
+  const removeItem = async (item) => {
+    const id = getId(item);
+
+    setBusyItem(id);
     try {
       const { data } = await axios.delete(
-        `${apiBase}/remove/${itemId}`,
+        `${apiBase}/remove/${id}`,
         getAuthHeader()
       );
       setCartItems(data.items || []);
@@ -69,6 +82,7 @@ export default function CartPage() {
     }
   };
 
+  // ✅ CLEAR CART
   const clearCart = async () => {
     try {
       await axios.delete(`${apiBase}/clear`, getAuthHeader());
@@ -96,16 +110,13 @@ export default function CartPage() {
       <div className="max-w-5xl mx-auto">
 
         {/* HEADER */}
-        <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-green-900">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-green-900">
             Your Cart
           </h1>
 
-          <div className="flex items-center gap-4">
-            <Link
-              to="/products"
-              className="text-sm text-amber-700 hover:underline"
-            >
+          <div className="flex gap-4">
+            <Link to="/products" className="text-sm text-amber-700 hover:underline">
               Continue shopping
             </Link>
 
@@ -125,76 +136,79 @@ export default function CartPage() {
         {cartItems.length === 0 ? (
           <p className="text-gray-600">Your cart is empty.</p>
         ) : (
-          cartItems.map((item) => (
-            <div
-              key={item.itemId}
-              className="border-t border-green-200 py-4 flex flex-col sm:flex-row justify-between gap-4"
-            >
-              <div className="flex items-center gap-4">
-                <img
-                  src={item.image || "/placeholder.png"}
-                  alt={item.name || "product"}
-                  className="w-20 h-20 object-cover rounded border"
-                />
+          cartItems.map((item) => {
+            const id = getId(item);
 
-                <div>
-                  <h2 className="font-semibold text-green-900">
-                    {item.name}
-                  </h2>
-                  <p className="text-sm text-gray-600">
-                    Rs.{item.price || 0}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Size: {item.size}
+            return (
+              <div
+                key={id}
+                className="border-t border-green-200 py-4 flex justify-between gap-4"
+              >
+                <div className="flex items-center gap-4">
+                  <img
+                    src={item.image || "/placeholder.png"}
+                    className="w-20 h-20 object-cover rounded border"
+                  />
+
+                  <div>
+                    <h2 className="font-semibold text-green-900">
+                      {item.name}
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      Rs.{item.price || 0}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Size: {item.size}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+
+                  {/* QUANTITY */}
+                  <div className="flex items-center border rounded">
+                    <button
+                      disabled={busyItem === id || item.quantity <= 1}
+                      onClick={() =>
+                        updateQuantity(item, item.quantity - 1)
+                      }
+                      className="px-3 py-2 disabled:opacity-50"
+                    >
+                      <Minus size={16} />
+                    </button>
+
+                    <span className="px-4">{item.quantity}</span>
+
+                    <button
+                      disabled={busyItem === id}
+                      onClick={() =>
+                        updateQuantity(item, item.quantity + 1)
+                      }
+                      className="px-3 py-2 disabled:opacity-50"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </div>
+
+                  {/* DELETE */}
+                  <button
+                    disabled={busyItem === id}
+                    onClick={() => {
+                      setConfirmAction(() => () => removeItem(item));
+                      setConfirmOpen(true);
+                    }}
+                    className="text-red-500 disabled:opacity-50"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+
+                  <p className="font-semibold text-green-900">
+                    Rs.{((item.price || 0) * (item.quantity || 0)).toFixed(2)}
                   </p>
                 </div>
               </div>
-
-              <div className="flex items-center gap-4">
-                {/* quantity */}
-                <div className="flex items-center border rounded">
-                  <button
-                    className="px-3 py-2"
-                    onClick={() =>
-                      updateQuantity(item.itemId, item.quantity - 1)
-                    }
-                  >
-                    <Minus size={16} />
-                  </button>
-
-                  <span className="px-4">
-                    {item.quantity}
-                  </span>
-
-                  <button
-                    className="px-3 py-2"
-                    onClick={() =>
-                      updateQuantity(item.itemId, item.quantity + 1)
-                    }
-                  >
-                    <Plus size={16} />
-                  </button>
-                </div>
-
-                {/* delete */}
-                <button
-                  onClick={() => {
-                    setConfirmAction(() => () =>
-                      removeItem(item.itemId)
-                    );
-                    setConfirmOpen(true);
-                  }}
-                  className="text-red-500"
-                >
-                  <Trash2 size={18} />
-                </button>
-
-                <p className="font-semibold text-green-900">
-                  Rs.{((item.price || 0) * (item.quantity || 0)).toFixed(2)}
-                </p>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
 
         {/* TOTAL */}
